@@ -10,7 +10,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cheggaaa/pb/v3"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/api"
 	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
@@ -122,7 +121,7 @@ func main() {
 
 	var wg sync.WaitGroup
 	results := make([]*comparer.Result, len(expandedTestCases))
-	progressBar := pb.StartNew(len(results))
+	// progressBar := pb.StartNew(len(results))
 	wg.Add(len(results))
 
 	workCh := make(chan struct{}, *queryParallelism)
@@ -140,16 +139,16 @@ func main() {
 			if !res.Success() {
 				allSuccess.Store(false)
 			}
-			progressBar.Increment()
+			// progressBar.Increment()
 			<-workCh
 			wg.Done()
 		}(i, tc)
 	}
 
 	wg.Wait()
-	progressBar.Finish()
+	// progressBar.Finish()
 
-	outp(results, *outputPassing, cfg.QueryTweaks)
+	outp(results, *outputPassing, cfg.QueryTweaks) //TODO: 输入用例名称 进行打印
 
 	if !allSuccess.Load() {
 		os.Exit(1)
