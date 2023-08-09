@@ -93,6 +93,8 @@ func main() {
 		outp = output.JSON
 	case "tsv":
 		outp = output.TSV
+	case "aonetext":
+		outp = output.AoneText
 	default:
 		log.Fatalf("Invalid output format %q", *outputFormat)
 	}
@@ -148,7 +150,7 @@ func main() {
 	wg.Wait()
 	// progressBar.Finish()
 
-	outp(results, *outputPassing, cfg.QueryTweaks) //TODO: 输入用例名称 进行打印
+	outp(results, *outputPassing, cfg) //TODO: 输入用例名称 进行打印
 
 	if !allSuccess.Load() {
 		os.Exit(1)
